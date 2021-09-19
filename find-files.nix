@@ -1,4 +1,6 @@
-{ lib ? import <nixpkgs/lib> }:
+{ lib ? import <nixpkgs/lib>
+, useGlobalGitIgnore ? true
+}:
 let
   parse-ini = import ./parse-git-config.nix { inherit lib; };
   parse-gitignore = import ./rules.nix { inherit lib; };
@@ -111,7 +113,7 @@ rec {
       # TODO: can local config override global core.excludesFile?
       # localConfigItems = parse-ini.parseIniFile (gitDir + "/config");
     in
-      globalIgnores ++ localIgnores;
+      lib.optionals useGlobalGitIgnore globalIgnores ++ localIgnores;
 
 
 
